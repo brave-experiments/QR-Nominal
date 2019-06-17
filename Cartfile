@@ -1,0 +1,2 @@
+github "nicklockwood/GZIP" >= 1.2
+github "yannickl/QRCodeReader.swift" >= 10.1.0

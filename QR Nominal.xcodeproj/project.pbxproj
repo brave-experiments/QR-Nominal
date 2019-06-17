@@ -13,6 +13,14 @@
 		59190101229AEA6900A50C2F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59190100229AEA6900A50C2F /* Assets.xcassets */; };
 		59190104229AEA6900A50C2F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 59190102229AEA6900A50C2F /* LaunchScreen.storyboard */; };
 		5919010F229AEA6900A50C2F /* QR_NominalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5919010E229AEA6900A50C2F /* QR_NominalTests.swift */; };
+		599C975D229D981200BA2B25 /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599C975C229D981200BA2B25 /* DataExtension.swift */; };
+		599C976F229DAD7300BA2B25 /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599C976E229DAD7300BA2B25 /* QRCode.swift */; };
+		599C9771229DAD9C00BA2B25 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599C9770229DAD9C00BA2B25 /* ArrayExtension.swift */; };
+		59CE1B19229D6A150095C299 /* QRCodeReader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59CE1B17229D6A150095C299 /* QRCodeReader.framework */; };
+		59CE1B1A229D6A150095C299 /* GZIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59CE1B18229D6A150095C299 /* GZIP.framework */; };
+		59CE1B1F229D6B6F0095C299 /* CoboDataExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CE1B1E229D6B6F0095C299 /* CoboDataExtractor.swift */; };
+		59CE1B21229D6B890095C299 /* CoboQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CE1B20229D6B890095C299 /* CoboQRCode.swift */; };
+		59CE1B23229D6BBD0095C299 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CE1B22229D6BBD0095C299 /* StringExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +44,14 @@
 		5919010A229AEA6900A50C2F /* QR NominalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "QR NominalTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5919010E229AEA6900A50C2F /* QR_NominalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QR_NominalTests.swift; sourceTree = "<group>"; };
 		59190110229AEA6900A50C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		599C975C229D981200BA2B25 /* DataExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtension.swift; sourceTree = "<group>"; };
+		599C976E229DAD7300BA2B25 /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
+		599C9770229DAD9C00BA2B25 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
+		59CE1B17229D6A150095C299 /* QRCodeReader.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QRCodeReader.framework; path = Carthage/Build/iOS/QRCodeReader.framework; sourceTree = "<group>"; };
+		59CE1B18229D6A150095C299 /* GZIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GZIP.framework; path = Carthage/Build/iOS/GZIP.framework; sourceTree = "<group>"; };
+		59CE1B1E229D6B6F0095C299 /* CoboDataExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoboDataExtractor.swift; sourceTree = "<group>"; };
+		59CE1B20229D6B890095C299 /* CoboQRCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoboQRCode.swift; sourceTree = "<group>"; };
+		59CE1B22229D6BBD0095C299 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +59,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59CE1B19229D6A150095C299 /* QRCodeReader.framework in Frameworks */,
+				59CE1B1A229D6A150095C299 /* GZIP.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,6 +80,7 @@
 				591900F8229AEA6800A50C2F /* QR Nominal */,
 				5919010D229AEA6900A50C2F /* QR NominalTests */,
 				591900F7229AEA6800A50C2F /* Products */,
+				59CE1B16229D6A150095C299 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,6 +96,9 @@
 		591900F8229AEA6800A50C2F /* QR Nominal */ = {
 			isa = PBXGroup;
 			children = (
+				599C976D229D9D2300BA2B25 /* Protocols */,
+				59CE1B1D229D6B5F0095C299 /* COBO */,
+				59CE1B1C229D6B560095C299 /* Extensions */,
 				591900F9229AEA6800A50C2F /* AppDelegate.swift */,
 				591900FB229AEA6800A50C2F /* ViewController.swift */,
 				591900FD229AEA6800A50C2F /* Main.storyboard */,
@@ -96,6 +118,42 @@
 			path = "QR NominalTests";
 			sourceTree = "<group>";
 		};
+		599C976D229D9D2300BA2B25 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				599C976E229DAD7300BA2B25 /* QRCode.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		59CE1B16229D6A150095C299 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				59CE1B18229D6A150095C299 /* GZIP.framework */,
+				59CE1B17229D6A150095C299 /* QRCodeReader.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		59CE1B1C229D6B560095C299 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				59CE1B22229D6BBD0095C299 /* StringExtension.swift */,
+				599C975C229D981200BA2B25 /* DataExtension.swift */,
+				599C9770229DAD9C00BA2B25 /* ArrayExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		59CE1B1D229D6B5F0095C299 /* COBO */ = {
+			isa = PBXGroup;
+			children = (
+				59CE1B1E229D6B6F0095C299 /* CoboDataExtractor.swift */,
+				59CE1B20229D6B890095C299 /* CoboQRCode.swift */,
+			);
+			path = COBO;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -106,6 +164,7 @@
 				591900F2229AEA6800A50C2F /* Sources */,
 				591900F3229AEA6800A50C2F /* Frameworks */,
 				591900F4229AEA6800A50C2F /* Resources */,
+				59CE1B1B229D6A4F0095C299 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -192,11 +251,39 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		59CE1B1B229D6A4F0095C299 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/GZIP.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/QRCodeReader.framework",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/usr/local/bin/carthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		591900F2229AEA6800A50C2F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				599C976F229DAD7300BA2B25 /* QRCode.swift in Sources */,
+				59CE1B1F229D6B6F0095C299 /* CoboDataExtractor.swift in Sources */,
+				599C975D229D981200BA2B25 /* DataExtension.swift in Sources */,
+				599C9771229DAD9C00BA2B25 /* ArrayExtension.swift in Sources */,
+				59CE1B21229D6B890095C299 /* CoboQRCode.swift in Sources */,
+				59CE1B23229D6BBD0095C299 /* StringExtension.swift in Sources */,
 				591900FC229AEA6800A50C2F /* ViewController.swift in Sources */,
 				591900FA229AEA6800A50C2F /* AppDelegate.swift in Sources */,
 			);
@@ -361,6 +448,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "QR Nominal/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -378,6 +469,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "QR Nominal/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
