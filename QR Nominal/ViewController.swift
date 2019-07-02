@@ -6,7 +6,8 @@ import UIKit
 import QRCodeReader
 import AVFoundation
 
-class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
+class ViewController: UIViewController, QRCodeViewControllerDelegate {
+    
 
     var shareButton: UIButton!
     var textView: UITextView!
@@ -24,11 +25,11 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
         shareButton.addTarget(self, action: #selector(shareAction), for: .touchUpInside)
         
         let scanButton = UIButton(type: .system)
-        scanButton.setTitle("Scan", for: .normal)
+        scanButton.setTitle(Strings.ScanButtonTitle, for: .normal)
         scanButton.addTarget(self, action: #selector(scanAction), for: .touchUpInside)
         
         let clearButton = UIButton(type: .system)
-        clearButton.setTitle("Clear", for: .normal)
+        clearButton.setTitle(Strings.ClearButtonTitle, for: .normal)
         clearButton.addTarget(self, action: #selector(clearAction), for: .touchUpInside)
         
         let stackView = UIStackView(arrangedSubviews: [clearButton, scanButton, shareButton])
@@ -68,10 +69,11 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                     } catch {
                         text = error.localizedDescription
                     }
-                    self.show(text: text)
+                    self.dismiss(animated: true, completion: nil)
+                    self.textView.text = text
                 }
             } else {
-                self.progressLabel.text = "Please continue scanning (\(count) of \(total))"
+                self.progressLabel.text = String.localizedStringWithFormat(Strings.ScannedQRCount, count, total)
             }
         }
     }
@@ -109,23 +111,8 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
     }
     
     @objc func scanAction() {
-        readerVC.delegate = self
-        progressLabel.text = "Scan within the box"
+        progressLabel.text = Strings.ScanningCOBO
         resetCollection()
-        readerVC.completionBlock = { (result: QRCodeReaderResult?) in
-            if let jsonData = result?.value.data(using: .utf8)
-            {
-                do {
-                    if let qrCode = try? JSONDecoder().decode(CoboQRCode.self, from: jsonData) {
-                        try self.qrCollection.insert(qr: qrCode)
-                    }
-                } catch {
-                    self.show(text: error.localizedDescription)
-                }
-            }
-        }
-        
-        // Presents the readerVC as modal form sheet
         readerVC.modalPresentationStyle = .formSheet
         present(readerVC, animated: true) {
             self.progressLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -137,40 +124,40 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
         }
     }
     @objc func clearAction() {
-        show(text: "")
+        self.textView.text = ""
     }
     
-    func show(text: String) {
-        self.dismiss(animated: true, completion: nil)
-        self.readerVC.stopScanning()
-        self.textView.text = text
-    }
-    
-    // Good practice: create the reader lazily to avoid cpu overload during the
-    // initialization and each time we need to scan a QRCode
-    lazy var readerVC: QRCodeReaderViewController = {
-        let builder = QRCodeReaderViewControllerBuilder {
-            $0.reader = QRCodeReader(metadataObjectTypes: [.qr], captureDevicePosition: .back)
-            
-            // Configure the view controller (optional)
-            $0.showTorchButton        = false
-            $0.showSwitchCameraButton = false
-            $0.showCancelButton       = true
-            $0.showOverlayView        = true
-            $0.reader.stopScanningWhenCodeIsFound = false
-            $0.rectOfInterest         = CGRect(x: 0.2, y: 0.2, width: 0.6, height: 0.6)
-        }
-        
-        return QRCodeReaderViewController(builder: builder)
+    lazy var readerVC: QRCodeViewController = {
+        let controller = QRCodeViewController()
+        controller.qrCodeDelegate = self
+        controller.stopScanningAutomatically = false
+        controller.instructionsLabel.isHidden = true
+        return controller
     }()
     
-    func reader(_ reader: QRCodeReaderViewController, didScanResult result: QRCodeReaderResult) {
+    func didScanQRCodeWithURL(_ url: URL) {
         
     }
     
-    func readerDidCancel(_ reader: QRCodeReaderViewController) {
+    func didScanQRCodeWithText(_ text: String) {
+        let data = text.data(using: .utf8)
+        if let data = data, let qrCode = try? JSONDecoder().decode(CoboQRCode.self, from: data) {
+            do {
+                try self.qrCollection.insert(qr: qrCode)
+            } catch {
+                self.dismiss(animated: true, completion: nil)
+                self.textView.text = error.localizedDescription
+            }
+        }
+    }
+    
+    func didCancelScanning() {
         resetCollection()
-        show(text: textView.text)
+    }
+    
+    func handleError(_ text: String) {
+        self.dismiss(animated: true, completion: nil)
+        self.textView.text = text
     }
     
     lazy var progressLabel: UILabel = {
