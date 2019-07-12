@@ -50,7 +50,16 @@ The Cobo Vault responds with a signed transaction:
     }
 
 The challenge send by when tapping `Web Authentication` to
-[verify](https://cobo.com/hardware-wallet/authentication) on the Cobo Vault.
+[verify](https://cobo.com/hardware-wallet/authentication) on the Cobo Vault:
+
+    {
+     "version" : 1,
+     "data" : {
+       "type" : "webAuth",
+       "data" : "BJSeKjr4o+KJTfmSjsp4UYzhI36TlaM\/KZaPrkV0cd3l\/h+kxQ9XUwSsmFEftWQe5M2k0ExI7NXVO\/hmcp8TSTgaD4MYGqjn55LOa0YydtAjtCCczUBQu75UynFhqZ9OnK2nDYwJLv1OkOLJ2gfwGahA5oenxkNhdMgBzKdUypE+XrwgJY02kxW9QDquuf+xVZAAQ4DdIYjjm8h9hyhHt67aUJasmd0RMw=="
+     },
+     "description" : "cobovalut qrcode protocol"
+    }
 
 # Compilation
 We encourage you to build your own version of the application: _cognoscere nisi habeat fiduciam_.
