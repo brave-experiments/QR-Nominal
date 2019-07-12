@@ -3,7 +3,7 @@ An iOS application to Decrypt and display message from multi-sequence [QR codes]
 
 At present,
 sequences for the [Cobo Vault](https://cobo.com/hardware-wallet) are supported.
-Take a look at Xinxi Wang's overview of the MQRs on
+Take a look at Xinxi Wang's overview of the Cobo Vault MQRs on
 [Coinut](https://coinut.com/blog/a-brief-review-of-cobo-vault-the-most-secure-hardware-wallet/).
 Here are three similar examples from this application:
 
