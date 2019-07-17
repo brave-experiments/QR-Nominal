@@ -77,3 +77,10 @@ click on "Show the Program Navigator" (the icon in the upper-lefthand corner),
 and then on the "QR Nominal" project icon.
 Then select the team to use for automatially signing images:
 ![screenshot](./documentation/enable-automatically-manage-signing.png)
+
+# Authors
+[Danish Jafri](https://github.com/danishjafri88) did all the heavy lifting,
+and [the altsumer](https://github.com/altsumer) did some minor tuning.
+
+This work is supported by [Brave Software International](https://github.com/brave-intl).
+
