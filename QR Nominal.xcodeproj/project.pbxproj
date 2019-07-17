@@ -53,7 +53,6 @@
 		599C975C229D981200BA2B25 /* DataExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtension.swift; sourceTree = "<group>"; };
 		599C976E229DAD7300BA2B25 /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
 		599C9770229DAD9C00BA2B25 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
-		59CE1B17229D6A150095C299 /* QRCodeReader.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QRCodeReader.framework; path = Carthage/Build/iOS/QRCodeReader.framework; sourceTree = "<group>"; };
 		59CE1B18229D6A150095C299 /* GZIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GZIP.framework; path = Carthage/Build/iOS/GZIP.framework; sourceTree = "<group>"; };
 		59CE1B1E229D6B6F0095C299 /* CoboDataExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoboDataExtractor.swift; sourceTree = "<group>"; };
 		59CE1B20229D6B890095C299 /* CoboQRCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoboQRCode.swift; sourceTree = "<group>"; };
@@ -147,7 +146,6 @@
 			children = (
 				59FB827122CBBAE3008A7F42 /* SnapKit.framework */,
 				59CE1B18229D6A150095C299 /* GZIP.framework */,
-				59CE1B17229D6A150095C299 /* QRCodeReader.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

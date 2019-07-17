@@ -10,7 +10,7 @@ struct Strings {
     public static let ScanQRCodePermissionErrorMessage = NSLocalizedString("ScanQRCodePermissionErrorMessage", bundle: Bundle.qrNominal, value: "Please allow Brave to access your device’s camera in ‘Settings’ -> ‘Privacy’ -> ‘Camera’.", comment: "Text of the prompt user to setup the camera authorization.")
     public static let ScanQRCodeErrorOKButton = NSLocalizedString("ScanQRCodeErrorOKButton", bundle: Bundle.qrNominal, value: "OK", comment: "OK button to dismiss the error prompt.")
     public static let ScanQRCodeInvalidDataErrorMessage = NSLocalizedString("ScanQRCodeInvalidDataErrorMessage", bundle: Bundle.qrNominal, value: "The data is invalid", comment: "Text of the prompt that is shown to the user when the data is invalid")
-    public static let ScanningCOBO = NSLocalizedString("ScanningCOBO", bundle: Bundle.qrNominal, value: "Scanning for COBO QR", comment: "QR Code reader Title")
+    public static let ScanningMQRs = NSLocalizedString("ScanningMQRs", bundle: Bundle.qrNominal, value: "Scanning for MQRs", comment: "QR Code reader Title")
     public static let ScannedQRCount = NSLocalizedString("ScannedQRCount", bundle: Bundle.qrNominal, value: "Please continue scanning (%d of %d)", comment: "Title describing number of qr captured")
     public static let ScanButtonTitle = NSLocalizedString("ScanButtonTitle", bundle: Bundle.qrNominal, value: "Scan", comment: "Scan button title.")
     public static let ClearButtonTitle = NSLocalizedString("ClearButtonTitle", bundle: Bundle.qrNominal, value: "Clear", comment: "Clear Button title")

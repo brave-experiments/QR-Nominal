@@ -110,7 +110,7 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
     }
     
     @objc func scanAction() {
-        progressLabel.text = Strings.ScanningCOBO
+        progressLabel.text = Strings.ScanningMQRs
         resetCollection()
         readerVC.modalPresentationStyle = .formSheet
         present(readerVC, animated: true) {
