@@ -68,6 +68,12 @@ We encourage you to build your own version of the application: _cognoscere nisi 
 
         brew install carthage
         
- In project directory:
+In project directory:
  
         carthage update --platform ios
+
+Launch `xcode`,
+click on "Show the Program Navigator" (the icon in the upper-lefthand corner),
+and then on the "QR Nominal" project icon.
+Then select the team to use for automatially signing images:
+![screenshot](./documentation/enable-automatically-manage-signing.png)
