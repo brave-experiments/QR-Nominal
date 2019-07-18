@@ -4,8 +4,8 @@
 
 import Foundation
 
-class CoboQRCode: Codable, Hashable {
-    static func == (lhs: CoboQRCode, rhs: CoboQRCode) -> Bool {
+class CoboMQRCode: Codable, Hashable {
+    static func == (lhs: CoboMQRCode, rhs: CoboMQRCode) -> Bool {
         return lhs.checkSum == rhs.checkSum && lhs.compress == rhs.compress && lhs.index == rhs.index && lhs.total == rhs.total
     }
     
@@ -23,18 +23,18 @@ class CoboQRCode: Codable, Hashable {
     var compress: Bool
 }
 
-struct CoboQRCodeCollection: Sequence, IteratorProtocol {
+struct CoboMQRCodeCollection: Sequence, IteratorProtocol {
     
-    var initialQR: CoboQRCode?
-    private var internalArray: [CoboQRCode] = []
-    private var currentInteration: Int = 0
+    var initialQR: CoboMQRCode?
+    private var internalArray: [CoboMQRCode] = []
+    private var currentIteration: Int = 0
     var completionBlock: ((Bool, Int, Int) -> ())?
     
     init() {
     }
     
-    mutating func insert(qr: CoboQRCode) throws {
-        if let validationError: CoboQRCodeInsertionError = validateInsertion(qr: qr) {
+    mutating func insert(qr: CoboMQRCode) throws {
+        if let validationError: CoboMQRCodeInsertionError = validateInsertion(qr: qr) {
             throw validationError
         }
         if internalArray.contains(qr) { return }
@@ -45,29 +45,29 @@ struct CoboQRCodeCollection: Sequence, IteratorProtocol {
         completionBlock?(collectionComplete, internalArray.count, qr.total)
     }
     
-    private mutating func validateInsertion(qr: CoboQRCode) -> CoboQRCodeInsertionError? {
+    private mutating func validateInsertion(qr: CoboMQRCode) -> CoboMQRCodeInsertionError? {
         guard let initialQR = initialQR else {
             self.initialQR = qr
             return nil
         }
-        if initialQR.total != qr.total { return CoboQRCodeInsertionError.total(lhs: initialQR.total, rhs: qr.total)}
-        if initialQR.checkSum != qr.checkSum { return CoboQRCodeInsertionError.checkSum(lhs: initialQR.checkSum, rhs: qr.checkSum) }
-        if initialQR.compress != qr.compress { return CoboQRCodeInsertionError.compress(lhs: initialQR.compress, rhs: qr.compress) }
+        if initialQR.total != qr.total { return CoboMQRCodeInsertionError.total(lhs: initialQR.total, rhs: qr.total)}
+        if initialQR.checkSum != qr.checkSum { return CoboMQRCodeInsertionError.checkSum(lhs: initialQR.checkSum, rhs: qr.checkSum) }
+        if initialQR.compress != qr.compress { return CoboMQRCodeInsertionError.compress(lhs: initialQR.compress, rhs: qr.compress) }
         return nil
     }
     
-    mutating func next() -> CoboQRCode? {
+    mutating func next() -> CoboMQRCode? {
         defer {
-            currentInteration += 1
+            currentIteration += 1
         }
-        guard !internalArray.isEmpty && internalArray.count > currentInteration else {
+        guard !internalArray.isEmpty && internalArray.count > currentIteration else {
             return nil
         }
-        return internalArray[currentInteration]
+        return internalArray[currentIteration]
     }
 }
 
-enum CoboQRCodeInsertionError: LocalizedError {
+enum CoboMQRCodeInsertionError: LocalizedError {
     case total(lhs: Int, rhs: Int)
     case checkSum(lhs: String, rhs: String)
     case compress(lhs: Bool, rhs: Bool)

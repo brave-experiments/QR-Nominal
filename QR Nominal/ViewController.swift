@@ -6,39 +6,20 @@ import UIKit
 import AVFoundation
 
 class ViewController: UIViewController, QRCodeViewControllerDelegate {
-    
 
     var shareButton: UIButton!
+    var scanButton: UIButton!
     var textView: UITextView!
     var mqrHandler: MQRCodeProtocol?
+    
     var mqrType: MQRType? {
         didSet {
-            self.clearAction()
-            self.mqrHandler = mqrType?.new {[weak mqrHandler] (success, count, total) in
-                guard let handler = mqrHandler else {
-                    return
-                }
-                DispatchQueue.main.async {
-                    if success {
-                        let text: String
-                        do {
-                            text = try handler.extractDataToString()
-                        } catch {
-                            text = error.localizedDescription
-                        }
-                        self.dismiss(animated: true, completion: nil)
-                        self.textView.text = text
-                    } else {
-                        self.progressLabel.text = String.localizedStringWithFormat(Strings.ScannedQRCount, count, total)
-                    }
-                }
-            }
+            setupMQRHandler()
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         setupView()
     }
     
@@ -47,7 +28,7 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
         shareButton.setImage(UIImage(named: "share"), for: .normal)
         shareButton.addTarget(self, action: #selector(shareAction), for: .touchUpInside)
         
-        let scanButton = UIButton(type: .system)
+        scanButton = UIButton(type: .system)
         scanButton.setTitle(Strings.ScanButtonTitle, for: .normal)
         scanButton.addTarget(self, action: #selector(scanAction), for: .touchUpInside)
         
@@ -65,6 +46,13 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
         
         textView = UITextView(frame: .zero)
         textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.isEditable = false
+        
+//        //Dark mode below
+//        textView.backgroundColor = .black
+//        textView.textColor = UIColor.Photon.Green70
+//        textView.adjustsFontForContentSizeCategory = true
+//        view.backgroundColor = .black
         
         self.view.addSubview(textView)
         
@@ -80,11 +68,6 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
             ])
         
     }
-
-    // handle this
-    func resetCollection() {
-        mqrHandler = nil
-    }
     
     @objc func shareAction() {
         if let text = textView.text {
@@ -92,13 +75,12 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
             let activityViewController : UIActivityViewController = UIActivityViewController(
                 activityItems: [text], applicationActivities: nil)
             
-            // This lines is for the popover you need to show in iPad
+            // This line is for the popover you need to show in iPad
             activityViewController.popoverPresentationController?.sourceView = shareButton
-            
-            // This line remove the arrow of the popover to show in iPad
+            // This line removes the arrow of the popover to show in iPad
             activityViewController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.any
-            activityViewController.popoverPresentationController?.sourceRect = CGRect(x: 150, y: 150, width: 0, height: 0)
             
+            activityViewController.popoverPresentationController?.sourceRect.origin.x += shareButton.bounds.width/2
             // Anything you want to exclude
             activityViewController.excludedActivityTypes = [
                 .postToWeibo,
@@ -109,14 +91,30 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
                 .postToVimeo,
                 .postToTencentWeibo
             ]
-            
             self.present(activityViewController, animated: true, completion: nil)
         }
     }
     
     @objc func scanAction() {
+        let actionSheet = UIAlertController(title: Strings.SelectMQRTypeTitle, message: nil, preferredStyle: .actionSheet)
+        actionSheet.popoverPresentationController?.sourceView = scanButton
+        actionSheet.popoverPresentationController?.sourceRect.origin.x += scanButton.bounds.width/2
+        actionSheet.addAction(UIAlertAction(title: Strings.CancelButtonTitle, style: .cancel, handler: nil))
+        for type in MQRType.allCases {
+            actionSheet.addAction(UIAlertAction(title: type.rawValue, style: .default, handler: { _ in
+                self.mqrType = type
+                if self.mqrType != nil {
+                    self.showScanner()
+                } else {
+                    self.textView.text = "MQR type not ready for use."
+                }
+            }))
+        }
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+    
+    func showScanner() {
         progressLabel.text = Strings.ScanningMQRs
-        resetCollection()
         readerVC.modalPresentationStyle = .formSheet
         present(readerVC, animated: true) {
             self.progressLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -127,8 +125,32 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
             self.progressLabel.rightAnchor.constraint(equalTo: self.readerVC.view.safeAreaLayoutGuide.rightAnchor, constant: 0.0).isActive = true
         }
     }
+    
     @objc func clearAction() {
         self.textView.text = ""
+    }
+    
+    func setupMQRHandler() {
+        self.clearAction()
+        self.mqrHandler = mqrType?.new { (success, count, total) in
+            guard let handler = self.mqrHandler else {
+                return
+            }
+            DispatchQueue.main.async {
+                if success {
+                    let text: String
+                    do {
+                        text = try handler.extractDataToString()
+                    } catch {
+                        text = error.localizedDescription
+                    }
+                    self.dismiss(animated: true, completion: nil)
+                    self.textView.text = text.prettyPrinted()
+                } else {
+                    self.progressLabel.text = String.localizedStringWithFormat(Strings.ScannedQRCount, count, total)
+                }
+            }
+        }
     }
     
     lazy var readerVC: QRCodeViewController = {
@@ -139,14 +161,17 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
         return controller
     }()
     
-    func didScanQRCodeWithURL(_ url: URL) {
-        
-    }
+    func didScanQRCodeWithURL(_ url: URL) {}
     
     func didScanQRCodeWithText(_ text: String) {
+        guard let mqrHandler = mqrHandler else {
+            self.dismiss(animated: true, completion: nil)
+            self.textView.text = "MQR type not selected"
+            return
+        }
         if let data = text.data(using: .utf8) {
             do {
-                try mqrHandler?.addCode(data: data)
+                try mqrHandler.addCode(data: data)
             } catch {
                 self.dismiss(animated: true, completion: nil)
                 self.textView.text = error.localizedDescription
@@ -155,7 +180,7 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
     }
     
     func didCancelScanning() {
-        resetCollection()
+        mqrType = nil
     }
     
     func handleError(_ text: String) {

@@ -4,12 +4,12 @@
 
 import Foundation
 
-class Cobo: MQRCodeProtocol {
+class CoboMQR: MQRCodeProtocol {
 
-    var collection: CoboQRCodeCollection
+    var collection: CoboMQRCodeCollection
     
     required init(completionBlock: MQRCodeBuildCompletionBlock) {
-        collection = CoboQRCodeCollection()
+        collection = CoboMQRCodeCollection()
         collection.completionBlock = completionBlock
     }
     
@@ -18,7 +18,7 @@ class Cobo: MQRCodeProtocol {
     }
     
     func addCode(data: Data) throws {
-        if let qrCode = try? JSONDecoder().decode(CoboQRCode.self, from: data) {
+        if let qrCode = try? JSONDecoder().decode(CoboMQRCode.self, from: data) {
             try collection.insert(qr: qrCode)
         } else {
             throw "Failed to create CoboQRCode: Invalid data"

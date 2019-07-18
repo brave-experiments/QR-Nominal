@@ -14,13 +14,13 @@
 		59190104229AEA6900A50C2F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 59190102229AEA6900A50C2F /* LaunchScreen.storyboard */; };
 		5919010F229AEA6900A50C2F /* QR_NominalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5919010E229AEA6900A50C2F /* QR_NominalTests.swift */; };
 		595FEF7022E0B7250051E773 /* MQRType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595FEF6F22E0B7250051E773 /* MQRType.swift */; };
-		595FEF7222E0DABB0051E773 /* Cobo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595FEF7122E0DABB0051E773 /* Cobo.swift */; };
+		595FEF7222E0DABB0051E773 /* CoboMQR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595FEF7122E0DABB0051E773 /* CoboMQR.swift */; };
 		599C975D229D981200BA2B25 /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599C975C229D981200BA2B25 /* DataExtension.swift */; };
 		599C976F229DAD7300BA2B25 /* MQRCodeProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599C976E229DAD7300BA2B25 /* MQRCodeProtocols.swift */; };
 		599C9771229DAD9C00BA2B25 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599C9770229DAD9C00BA2B25 /* ArrayExtension.swift */; };
 		59CE1B1A229D6A150095C299 /* GZIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59CE1B18229D6A150095C299 /* GZIP.framework */; };
 		59CE1B1F229D6B6F0095C299 /* CoboDataExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CE1B1E229D6B6F0095C299 /* CoboDataExtractor.swift */; };
-		59CE1B21229D6B890095C299 /* CoboQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CE1B20229D6B890095C299 /* CoboQRCode.swift */; };
+		59CE1B21229D6B890095C299 /* CoboMQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CE1B20229D6B890095C299 /* CoboMQRCode.swift */; };
 		59CE1B23229D6BBD0095C299 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CE1B22229D6BBD0095C299 /* StringExtension.swift */; };
 		59F22B7522CA8D8300FB8D7B /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F22B7422CA8D8300FB8D7B /* QRCodeViewController.swift */; };
 		59FB826722CBB4A9008A7F42 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59FB826622CBB4A9008A7F42 /* Strings.swift */; };
@@ -53,13 +53,13 @@
 		5919010E229AEA6900A50C2F /* QR_NominalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QR_NominalTests.swift; sourceTree = "<group>"; };
 		59190110229AEA6900A50C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		595FEF6F22E0B7250051E773 /* MQRType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQRType.swift; sourceTree = "<group>"; };
-		595FEF7122E0DABB0051E773 /* Cobo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cobo.swift; sourceTree = "<group>"; };
+		595FEF7122E0DABB0051E773 /* CoboMQR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoboMQR.swift; sourceTree = "<group>"; };
 		599C975C229D981200BA2B25 /* DataExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtension.swift; sourceTree = "<group>"; };
 		599C976E229DAD7300BA2B25 /* MQRCodeProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQRCodeProtocols.swift; sourceTree = "<group>"; };
 		599C9770229DAD9C00BA2B25 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		59CE1B18229D6A150095C299 /* GZIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GZIP.framework; path = Carthage/Build/iOS/GZIP.framework; sourceTree = "<group>"; };
 		59CE1B1E229D6B6F0095C299 /* CoboDataExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoboDataExtractor.swift; sourceTree = "<group>"; };
-		59CE1B20229D6B890095C299 /* CoboQRCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoboQRCode.swift; sourceTree = "<group>"; };
+		59CE1B20229D6B890095C299 /* CoboMQRCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoboMQRCode.swift; sourceTree = "<group>"; };
 		59CE1B22229D6BBD0095C299 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		59F22B7422CA8D8300FB8D7B /* QRCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeViewController.swift; sourceTree = "<group>"; };
 		59FB826622CBB4A9008A7F42 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
@@ -172,8 +172,8 @@
 			isa = PBXGroup;
 			children = (
 				59CE1B1E229D6B6F0095C299 /* CoboDataExtractor.swift */,
-				59CE1B20229D6B890095C299 /* CoboQRCode.swift */,
-				595FEF7122E0DABB0051E773 /* Cobo.swift */,
+				59CE1B20229D6B890095C299 /* CoboMQRCode.swift */,
+				595FEF7122E0DABB0051E773 /* CoboMQR.swift */,
 			);
 			path = COBO;
 			sourceTree = "<group>";
@@ -334,9 +334,9 @@
 				59FB826722CBB4A9008A7F42 /* Strings.swift in Sources */,
 				59FB826922CBB4E1008A7F42 /* BundleExtensions.swift in Sources */,
 				599C975D229D981200BA2B25 /* DataExtension.swift in Sources */,
-				595FEF7222E0DABB0051E773 /* Cobo.swift in Sources */,
+				595FEF7222E0DABB0051E773 /* CoboMQR.swift in Sources */,
 				599C9771229DAD9C00BA2B25 /* ArrayExtension.swift in Sources */,
-				59CE1B21229D6B890095C299 /* CoboQRCode.swift in Sources */,
+				59CE1B21229D6B890095C299 /* CoboMQRCode.swift in Sources */,
 				59CE1B23229D6BBD0095C299 /* StringExtension.swift in Sources */,
 				59F22B7522CA8D8300FB8D7B /* QRCodeViewController.swift in Sources */,
 				591900FC229AEA6800A50C2F /* ViewController.swift in Sources */,
@@ -504,7 +504,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9J4BQ2625H;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -527,7 +527,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9J4BQ2625H;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",

@@ -15,5 +15,7 @@ struct Strings {
     public static let ScanButtonTitle = NSLocalizedString("ScanButtonTitle", bundle: Bundle.qrNominal, value: "Scan", comment: "Scan button title.")
     public static let ClearButtonTitle = NSLocalizedString("ClearButtonTitle", bundle: Bundle.qrNominal, value: "Clear", comment: "Clear Button title")
     public static let CancelButtonTitle = NSLocalizedString("CancelButtonTitle", bundle: Bundle.qrNominal, value: "Cancel", comment: "Cancel Button title")
+    public static let SelectMQRTypeTitle = NSLocalizedString("SelectMQRTypeTitle", bundle: Bundle.qrNominal, value: "Select the MQR type", comment: "Title for Action sheet to choose MQR type")
+    
     
 }

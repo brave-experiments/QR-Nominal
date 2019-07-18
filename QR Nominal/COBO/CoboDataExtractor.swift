@@ -8,7 +8,7 @@ import CommonCrypto.CommonDigest
 
 
 struct CoboDataExtractor {
-    static func extract(from parts: CoboQRCodeCollection) throws -> String {
+    static func extract(from parts: CoboMQRCodeCollection) throws -> String {
         //validating checksum
         var md5Context = CC_MD5_CTX()
         CC_MD5_Init(&md5Context)
@@ -17,8 +17,9 @@ struct CoboDataExtractor {
         var base64String = ""
         for code in parts {
             if let data = code.value.data(using: .utf8), data.count > 0 {
-                let bytes = data.withUnsafeBytes { $0.load(as: UnsafePointer<CChar>.self) }
-                _ = CC_MD5_Update(&md5Context, bytes, numericCast(data.count))
+                data.withUnsafeBytes {
+                    _ = CC_MD5_Update(&md5Context, $0, numericCast(data.count))
+                }
             }
             base64String += code.value
         }

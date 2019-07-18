@@ -4,16 +4,19 @@
 
 import Foundation
 
-enum MQRType {
-    case cobo
-    case ellipal
+// Add new mqr types here to get started.
+enum MQRType: String, CaseIterable {
+    case cobo = "COBO"
+    case ellipal = "Ellipal"
     
     func new(completionBlock: MQRCodeBuildCompletionBlock) -> MQRCodeProtocol? {
         switch self {
         case .cobo:
-            return Cobo(completionBlock: completionBlock)
+            return CoboMQR(completionBlock: completionBlock)
         default:
             return nil
         }
     }
+    
+    
 }
