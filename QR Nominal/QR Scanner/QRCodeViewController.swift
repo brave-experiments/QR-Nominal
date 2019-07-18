@@ -46,22 +46,18 @@ class QRCodeViewController: UIViewController {
         return label
     }()
     private var maskView: UIView = UIView()
-    private var isAnimationing: Bool = false
+    private var isAnimating: Bool = false
     private var isLightOn: Bool = false
     private var shapeLayer: CAShapeLayer = CAShapeLayer()
     
     private var scanRange: CGRect {
+        let val = UIDevice.current.orientation.isLandscape ? view.frame.height : view.frame.width
         let size = UIDevice.current.userInterfaceIdiom == .pad ?
-            CGSize(width: view.frame.width / 2, height: view.frame.width / 2) :
-            CGSize(width: view.frame.width / 3 * 2, height: view.frame.width / 3 * 2)
+            CGSize(width: val / 2, height: val / 2) :
+            CGSize(width: val / 3 * 2, height: val / 3 * 2)
         var rect = CGRect(origin: .zero, size: size)
-        rect.center = UIScreen.main.bounds.center
+        rect.center = view.center
         return rect
-    }
-    
-    private var scanBorderHeight: CGFloat {
-        return UIDevice.current.userInterfaceIdiom == .pad ?
-            view.frame.width / 2 : view.frame.width / 3 * 2
     }
     
     lazy var cancelButton: UIButton = {
@@ -96,20 +92,17 @@ class QRCodeViewController: UIViewController {
         self.view.addSubview(scanLine)
         self.view.addSubview(instructionsLabel)
         self.view.addSubview(cancelButton)
-        
         setupConstraints()
-        let rectPath = UIBezierPath(rect: UIScreen.main.bounds)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let rectPath = UIBezierPath(rect: view.bounds)
         rectPath.append(UIBezierPath(rect: scanRange).reversing())
         shapeLayer.path = rectPath.cgPath
         maskView.layer.mask = shapeLayer
-        
-        isAnimationing = true
-        startScanLineAnimation()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         self.captureSession.startRunning()
+        isAnimating = true
         startScanLineAnimation()
     }
     
@@ -130,12 +123,14 @@ class QRCodeViewController: UIViewController {
         if UIDevice.current.userInterfaceIdiom == .pad {
             scanBorder.snp.makeConstraints { (make) in
                 make.center.equalTo(self.view)
-                make.width.height.equalTo(view.frame.width / 2)
+                make.width.equalTo(view).multipliedBy(0.5)
+                make.height.equalTo(scanBorder.snp.width)
             }
         } else {
             scanBorder.snp.makeConstraints { (make) in
                 make.center.equalTo(self.view)
-                make.width.height.equalTo(view.frame.width / 3 * 2)
+                make.width.equalTo(view).multipliedBy(2.0/3)
+                make.height.equalTo(scanBorder.snp.width)
             }
         }
         scanLine.snp.makeConstraints { (make) in
@@ -152,14 +147,14 @@ class QRCodeViewController: UIViewController {
     }
     
     @objc func startScanLineAnimation() {
-        if !isAnimationing {
+        if !isAnimating {
             return
         }
         self.view.layoutIfNeeded()
         self.view.setNeedsLayout()
-        UIView.animate(withDuration: 2.4, animations: {
+        UIView.animate(withDuration: 2.4, delay: 0, options: [.autoreverse, .allowUserInteraction], animations: {
             self.scanLine.snp.updateConstraints({ (make) in
-                make.top.equalTo(self.scanBorder.snp.top).offset(self.scanBorderHeight - 6)
+                make.top.equalTo(self.scanBorder.snp.top).offset(self.scanBorder.bounds.height - 12)
             })
             self.view.layoutIfNeeded()
         }) { (value: Bool) in
@@ -171,7 +166,7 @@ class QRCodeViewController: UIViewController {
     }
     
     func stopScanLineAnimation() {
-        isAnimationing = false
+        isAnimating = false
     }
     
     @objc func goBack() {
@@ -236,10 +231,38 @@ class QRCodeViewController: UIViewController {
     
     override func willAnimateRotation(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
         shapeLayer.removeFromSuperlayer()
-        let rectPath = UIBezierPath(rect: UIScreen.main.bounds)
+        let rectPath = UIBezierPath(rect: view.bounds)
         rectPath.append(UIBezierPath(rect: scanRange).reversing())
         shapeLayer.path = rectPath.cgPath
         maskView.layer.mask = shapeLayer
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            scanBorder.snp.remakeConstraints { (make) in
+                make.center.equalTo(self.view)
+                switch toInterfaceOrientation {
+                case .landscapeLeft, .landscapeRight:
+                    make.height.equalTo(view).multipliedBy(0.5)
+                    make.width.equalTo(scanBorder.snp.height)
+                default:
+                    make.width.equalTo(view).multipliedBy(0.5)
+                    make.height.equalTo(scanBorder.snp.width)
+                }
+                
+            }
+        } else {
+            scanBorder.snp.remakeConstraints { (make) in
+                make.center.equalTo(self.view)
+                switch toInterfaceOrientation {
+                case .landscapeLeft, .landscapeRight:
+                    make.height.equalTo(view).multipliedBy(2.0/3)
+                    make.width.equalTo(scanBorder.snp.height)
+                default:
+                    make.width.equalTo(view).multipliedBy(2.0/3)
+                    make.height.equalTo(scanBorder.snp.width)
+                }
+            }
+        }
+        
         
         guard let videoPreviewLayer = self.videoPreviewLayer else {
             return
