@@ -17,9 +17,8 @@ struct CoboDataExtractor {
         var base64String = ""
         for code in parts {
             if let data = code.value.data(using: .utf8), data.count > 0 {
-                data.withUnsafeBytes {
-                    _ = CC_MD5_Update(&md5Context, $0, numericCast(data.count))
-                }
+                let bytes = data.withUnsafeBytes { $0.load(as: UnsafePointer<CChar>.self) }
+                _ = CC_MD5_Update(&md5Context, bytes, numericCast(data.count))
             }
             base64String += code.value
         }

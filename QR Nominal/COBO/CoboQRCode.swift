@@ -4,7 +4,7 @@
 
 import Foundation
 
-class CoboQRCode: QRCode {
+class CoboQRCode: Codable, Hashable {
     static func == (lhs: CoboQRCode, rhs: CoboQRCode) -> Bool {
         return lhs.checkSum == rhs.checkSum && lhs.compress == rhs.compress && lhs.index == rhs.index && lhs.total == rhs.total
     }
@@ -23,8 +23,7 @@ class CoboQRCode: QRCode {
     var compress: Bool
 }
 
-struct CoboQRCodeCollection: QRCodeCollection {
-    typealias QRType = CoboQRCode
+struct CoboQRCodeCollection: Sequence, IteratorProtocol {
     
     var initialQR: CoboQRCode?
     private var internalArray: [CoboQRCode] = []

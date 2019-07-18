@@ -10,12 +10,36 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
 
     var shareButton: UIButton!
     var textView: UITextView!
-    var qrCollection: CoboQRCodeCollection!
+    var mqrHandler: MQRCodeProtocol?
+    var mqrType: MQRType? {
+        didSet {
+            self.clearAction()
+            self.mqrHandler = mqrType?.new {[weak mqrHandler] (success, count, total) in
+                guard let handler = mqrHandler else {
+                    return
+                }
+                DispatchQueue.main.async {
+                    if success {
+                        let text: String
+                        do {
+                            text = try handler.extractDataToString()
+                        } catch {
+                            text = error.localizedDescription
+                        }
+                        self.dismiss(animated: true, completion: nil)
+                        self.textView.text = text
+                    } else {
+                        self.progressLabel.text = String.localizedStringWithFormat(Strings.ScannedQRCount, count, total)
+                    }
+                }
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         setupView()
-        
     }
     
     func setupView() {
@@ -57,28 +81,9 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
         
     }
 
+    // handle this
     func resetCollection() {
-        qrCollection = CoboQRCodeCollection()
-        qrCollection.completionBlock = { (success, count, total) in
-            if success {
-                DispatchQueue.main.async {
-                    let text: String
-                    do {
-                        text = try self.textFromCollection()
-                    } catch {
-                        text = error.localizedDescription
-                    }
-                    self.dismiss(animated: true, completion: nil)
-                    self.textView.text = text
-                }
-            } else {
-                self.progressLabel.text = String.localizedStringWithFormat(Strings.ScannedQRCount, count, total)
-            }
-        }
-    }
-    
-    func textFromCollection() throws -> String {
-        return try CoboDataExtractor.extract(from: self.qrCollection).prettyPrinted()
+        mqrHandler = nil
     }
     
     @objc func shareAction() {
@@ -139,10 +144,9 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
     }
     
     func didScanQRCodeWithText(_ text: String) {
-        let data = text.data(using: .utf8)
-        if let data = data, let qrCode = try? JSONDecoder().decode(CoboQRCode.self, from: data) {
+        if let data = text.data(using: .utf8) {
             do {
-                try self.qrCollection.insert(qr: qrCode)
+                try mqrHandler?.addCode(data: data)
             } catch {
                 self.dismiss(animated: true, completion: nil)
                 self.textView.text = error.localizedDescription
