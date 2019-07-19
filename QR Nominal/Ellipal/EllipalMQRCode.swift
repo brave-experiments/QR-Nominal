@@ -57,6 +57,7 @@ struct EllipalMQRCodeCollection: Sequence, IteratorProtocol {
             return nil
         }
         if initialQR.total != qr.total { return EllipalMQRCodeInsertionError.total(lhs: initialQR.total, rhs: qr.total)}
+        if initialQR.action != qr.action { return EllipalMQRCodeInsertionError.action(lhs: initialQR.action, rhs: qr.action)}
         return nil
     }
     
@@ -73,10 +74,12 @@ struct EllipalMQRCodeCollection: Sequence, IteratorProtocol {
 
 enum EllipalMQRCodeInsertionError: LocalizedError {
     case total(lhs: Int, rhs: Int)
+    case action(lhs: String, rhs: String)
     
     var localizedDescription: String {
         switch self {
         case .total(let lhs, let rhs): return "Two Codes with different Total: \(lhs) vs \(rhs)"
+        case .action(let lhs, let rhs): return "Two Codes with different Action: \(lhs) vs \(rhs)"
         }
     }
 }
