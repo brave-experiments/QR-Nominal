@@ -9,5 +9,6 @@ typealias MQRCodeBuildCompletionBlock = ((_ finished: Bool, _ currentCount: Int,
 protocol MQRCodeProtocol: AnyObject {
     init(completionBlock: MQRCodeBuildCompletionBlock)
     func extractDataToString() throws -> String
-    func addCode(data: Data) throws
+    func addCode(code: Any) throws
+    static func decode(data: Data) throws -> Any
 }

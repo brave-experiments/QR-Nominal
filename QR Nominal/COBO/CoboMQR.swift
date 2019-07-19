@@ -5,7 +5,7 @@
 import Foundation
 
 class CoboMQR: MQRCodeProtocol {
-
+    
     var collection: CoboMQRCodeCollection
     
     required init(completionBlock: MQRCodeBuildCompletionBlock) {
@@ -17,11 +17,15 @@ class CoboMQR: MQRCodeProtocol {
         return try CoboDataExtractor.extract(from: collection)
     }
     
-    func addCode(data: Data) throws {
-        if let qrCode = try? JSONDecoder().decode(CoboMQRCode.self, from: data) {
-            try collection.insert(qr: qrCode)
+    func addCode(code: Any) throws {
+        if let code = code as? CoboMQRCode {
+            try collection.insert(qr: code)
         } else {
-            throw "Failed to create CoboQRCode: Invalid data"
+            throw "Failed to add Cobo code: Invalid concrete type"
         }
+    }
+    
+    static func decode(data: Data) throws -> Any {
+        return try JSONDecoder().decode(CoboMQRCode.self, from: data)
     }
 }

@@ -96,24 +96,6 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
     }
     
     @objc func scanAction() {
-        let actionSheet = UIAlertController(title: Strings.SelectMQRTypeTitle, message: nil, preferredStyle: .actionSheet)
-        actionSheet.popoverPresentationController?.sourceView = scanButton
-        actionSheet.popoverPresentationController?.sourceRect.origin.x += scanButton.bounds.width/2
-        actionSheet.addAction(UIAlertAction(title: Strings.CancelButtonTitle, style: .cancel, handler: nil))
-        for type in MQRType.allCases {
-            actionSheet.addAction(UIAlertAction(title: type.rawValue, style: .default, handler: { _ in
-                self.mqrType = type
-                if self.mqrType != nil {
-                    self.showScanner()
-                } else {
-                    self.textView.text = "MQR type not ready for use."
-                }
-            }))
-        }
-        self.present(actionSheet, animated: true, completion: nil)
-    }
-    
-    func showScanner() {
         progressLabel.text = Strings.ScanningMQRs
         readerVC.modalPresentationStyle = .formSheet
         present(readerVC, animated: true) {
@@ -164,14 +146,13 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {}
     
     func didScanQRCodeWithText(_ text: String) {
-        guard let mqrHandler = mqrHandler else {
-            self.dismiss(animated: true, completion: nil)
-            self.textView.text = "MQR type not selected"
-            return
-        }
         if let data = text.data(using: .utf8) {
             do {
-                try mqrHandler.addCode(data: data)
+                let mqrDetectedTuple = try MQRType.detectType(from: data)
+                if mqrType == nil || mqrType! != mqrDetectedTuple.0 {
+                    mqrType = mqrDetectedTuple.0
+                }
+                try mqrHandler?.addCode(code: mqrDetectedTuple.1)
             } catch {
                 self.dismiss(animated: true, completion: nil)
                 self.textView.text = error.localizedDescription
