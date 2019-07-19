@@ -75,7 +75,6 @@ class EllipalMQR: MQRCodeProtocol {
      
  */
     static func decode(text: String) throws -> Any {
-        print(text)
         guard let url = URL(string: text) else {
             throw "Ellipal MQRcodes encode URLs, not strings"
         }
