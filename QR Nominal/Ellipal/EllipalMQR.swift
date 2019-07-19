@@ -75,28 +75,28 @@ class EllipalMQR: MQRCodeProtocol {
      
  */
     static func decode(text: String) throws -> Any {
-        if let url = URL(string: text) {
-            if (url.scheme != "elp") {
-                throw "Not an elp:// URL"
-            }
-            if (url.host == nil) {
-                throw "Missing ACTION in elp:// URL"
-            }
-
-            var index = 1
-            if let user = url.user {
-                index = Int(user) ?? 1
-            }
-
-            var total = 1
-            if let password = url.password {
-                total = Int(password) ?? 1
-            }
-
-            return EllipalMQRCode(version: "V2", index: index, total: total, action: url.host!, components: url.pathComponents)
-
-        } else {
+        print(text)
+        guard let url = URL(string: text) else {
             throw "Ellipal MQRcodes encode URLs, not strings"
         }
+        if (url.scheme != "elp") {
+            throw "Not an elp:// URL"
+        }
+        if (url.host == nil) {
+            throw "Missing ACTION in elp:// URL"
+        }
+
+        var index = 1
+        if let user = url.user {
+            index = Int(user) ?? 1
+        }
+
+        var total = 1
+        if let password = url.password {
+            total = Int(password) ?? 1
+        }
+
+        return EllipalMQRCode(version: "V2", index: index, total: total, action: url.host!, components: url.pathComponents)
+
     }
 }
