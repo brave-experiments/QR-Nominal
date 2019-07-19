@@ -15,7 +15,6 @@ private struct QRCodeViewControllerUX {
 }
 
 protocol QRCodeViewControllerDelegate {
-    func didScanQRCodeWithURL(_ url: URL)
     func didScanQRCodeWithText(_ text: String)
     func handleError(_ text: String)
     func didCancelScanning()
@@ -289,11 +288,7 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
             return
         }
         func sendText(text: String) {
-            if let url = URL(string: text) {
-                qrCodeDelegate.didScanQRCodeWithURL(url)
-            } else {
-                qrCodeDelegate.didScanQRCodeWithText(text)
-            }
+            qrCodeDelegate.didScanQRCodeWithText(text)
         }
         if stopScanningAutomatically {
             self.captureSession.stopRunning()

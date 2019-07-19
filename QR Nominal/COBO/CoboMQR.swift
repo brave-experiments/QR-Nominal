@@ -25,7 +25,10 @@ class CoboMQR: MQRCodeProtocol {
         }
     }
     
-    static func decode(data: Data) throws -> Any {
-        return try JSONDecoder().decode(CoboMQRCode.self, from: data)
+    static func decode(text: String) throws -> Any {
+        if let data = text.data(using: .utf8) {
+            return try JSONDecoder().decode(CoboMQRCode.self, from: data)
+        }
+        throw "Text not UTF8"
     }
 }

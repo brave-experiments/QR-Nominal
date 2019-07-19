@@ -10,5 +10,5 @@ protocol MQRCodeProtocol: AnyObject {
     init(completionBlock: MQRCodeBuildCompletionBlock)
     func extractDataToString() throws -> String
     func addCode(code: Any) throws
-    static func decode(data: Data) throws -> Any
+    static func decode(text: String) throws -> Any
 }

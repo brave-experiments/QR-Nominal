@@ -143,20 +143,16 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
         return controller
     }()
     
-    func didScanQRCodeWithURL(_ url: URL) {}
-    
     func didScanQRCodeWithText(_ text: String) {
-        if let data = text.data(using: .utf8) {
-            do {
-                let mqrDetectedTuple = try MQRType.detectType(from: data)
-                if mqrType == nil || mqrType! != mqrDetectedTuple.0 {
-                    mqrType = mqrDetectedTuple.0
-                }
-                try mqrHandler?.addCode(code: mqrDetectedTuple.1)
-            } catch {
-                self.dismiss(animated: true, completion: nil)
-                self.textView.text = error.localizedDescription
+        do {
+            let mqrDetectedTuple = try MQRType.detectType(from: text)
+            if mqrType == nil || mqrType! != mqrDetectedTuple.0 {
+                mqrType = mqrDetectedTuple.0
             }
+            try mqrHandler?.addCode(code: mqrDetectedTuple.1)
+        } catch {
+            self.dismiss(animated: true, completion: nil)
+            self.textView.text = error.localizedDescription
         }
     }
     
