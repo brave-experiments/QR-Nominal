@@ -13,20 +13,23 @@ enum MQRType: String, CaseIterable {
         switch self {
         case .cobo:
             return CoboMQR(completionBlock: completionBlock)
-        default:
-            return nil
+        case .ellipal:
+            return EllipalMQR(completionBlock: completionBlock)
         }
     }
-    
+
     // Detects sequentially from this enum and returns the first found.
-    static func detectType(from data: Data) throws -> (MQRType, Any) {
+    static func detectType(from text: String) throws -> (MQRType, Any) {
         for type in MQRType.allCases {
             switch type {
             case .cobo:
-                if let code = try? CoboMQR.decode(data: data) {
+                if let code = try? CoboMQR.decode(text: text) {
                     return (.cobo, code)
                 }
-            default: break
+            case .ellipal:
+                if let code = try? EllipalMQR.decode(text: text) {
+                    return (.ellipal, code)
+                }
             }
         }
         throw "Failed to find any compatible MQR type for this QR"
