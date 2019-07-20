@@ -15,6 +15,7 @@
 		5919010F229AEA6900A50C2F /* QR_NominalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5919010E229AEA6900A50C2F /* QR_NominalTests.swift */; };
 		595FEF7022E0B7250051E773 /* MQRType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595FEF6F22E0B7250051E773 /* MQRType.swift */; };
 		595FEF7222E0DABB0051E773 /* CoboMQR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595FEF7122E0DABB0051E773 /* CoboMQR.swift */; };
+		595FEF7A22E173F80051E773 /* AGLRY.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 595FEF7922E173F80051E773 /* AGLRY.ttf */; };
 		599C975D229D981200BA2B25 /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599C975C229D981200BA2B25 /* DataExtension.swift */; };
 		599C976F229DAD7300BA2B25 /* MQRCodeProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599C976E229DAD7300BA2B25 /* MQRCodeProtocols.swift */; };
 		599C9771229DAD9C00BA2B25 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599C9770229DAD9C00BA2B25 /* ArrayExtension.swift */; };
@@ -54,6 +55,7 @@
 		59190110229AEA6900A50C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		595FEF6F22E0B7250051E773 /* MQRType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQRType.swift; sourceTree = "<group>"; };
 		595FEF7122E0DABB0051E773 /* CoboMQR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoboMQR.swift; sourceTree = "<group>"; };
+		595FEF7922E173F80051E773 /* AGLRY.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AGLRY.ttf; sourceTree = "<group>"; };
 		599C975C229D981200BA2B25 /* DataExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtension.swift; sourceTree = "<group>"; };
 		599C976E229DAD7300BA2B25 /* MQRCodeProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQRCodeProtocols.swift; sourceTree = "<group>"; };
 		599C9770229DAD9C00BA2B25 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				591900FD229AEA6800A50C2F /* Main.storyboard */,
 				59190100229AEA6900A50C2F /* Assets.xcassets */,
 				59190102229AEA6900A50C2F /* LaunchScreen.storyboard */,
+				595FEF7922E173F80051E773 /* AGLRY.ttf */,
 				59190105229AEA6900A50C2F /* Info.plist */,
 			);
 			path = "QR Nominal";
@@ -284,6 +287,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				595FEF7A22E173F80051E773 /* AGLRY.ttf in Resources */,
 				59190104229AEA6900A50C2F /* LaunchScreen.storyboard in Resources */,
 				59190101229AEA6900A50C2F /* Assets.xcassets in Resources */,
 				591900FF229AEA6800A50C2F /* Main.storyboard in Resources */,
@@ -504,7 +508,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CZ8C3324BS;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -527,7 +531,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CZ8C3324BS;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",

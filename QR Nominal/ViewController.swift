@@ -7,10 +7,17 @@ import AVFoundation
 
 class ViewController: UIViewController, QRCodeViewControllerDelegate {
 
+    var darkMode = true
+    var animateLaunch = true
+    var launchAnimationShown = false
+    
     var shareButton: UIButton!
     var scanButton: UIButton!
+    var clearButton: UIButton!
     var textView: UITextView!
+    var stackView: UIStackView!
     var mqrHandler: MQRCodeProtocol?
+    
     
     var mqrType: MQRType? {
         didSet {
@@ -32,11 +39,11 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
         scanButton.setTitle(Strings.ScanButtonTitle, for: .normal)
         scanButton.addTarget(self, action: #selector(scanAction), for: .touchUpInside)
         
-        let clearButton = UIButton(type: .system)
+        clearButton = UIButton(type: .system)
         clearButton.setTitle(Strings.ClearButtonTitle, for: .normal)
         clearButton.addTarget(self, action: #selector(clearAction), for: .touchUpInside)
         
-        let stackView = UIStackView(arrangedSubviews: [clearButton, scanButton, shareButton])
+        stackView = UIStackView(arrangedSubviews: [clearButton, scanButton, shareButton])
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
@@ -48,13 +55,9 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isEditable = false
         
-//        //Dark mode below
-//        textView.backgroundColor = .black
-//        textView.textColor = UIColor.Photon.Green70
-//        textView.adjustsFontForContentSizeCategory = true
-//        view.backgroundColor = .black
-        
         self.view.addSubview(textView)
+        
+        setTheme()
         
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
@@ -66,7 +69,56 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
             textView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -16.0),
             textView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
             ])
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        showLaunchAnimationIfAllowed()
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return darkMode ? .lightContent : .default
+    }
+    
+    func setTheme() {
+        if darkMode {
+            //Dark -Matrix mode below
+            textView.backgroundColor = .black
+            textView.textColor = UIColor.Photon.Green60
+            textView.adjustsFontForContentSizeCategory = true
+            view.backgroundColor = .black
+            [clearButton, shareButton, scanButton].forEach {
+                $0?.tintColor = UIColor.Photon.Green60
+            }
+        }
+    }
+    
+    func showLaunchAnimationIfAllowed() {
+        if animateLaunch && !launchAnimationShown {
+            launchAnimationShown = true
+            stackView.isHidden = true
+            textView.font = UIFont(name: "AGLRY", size: 44)
+            textView.textAlignment = .center
+            
+            textView.text = "\n\nQR\nNOMINAL"
+            self.textView.alpha = 0.5
+            UIView.animate(withDuration: 2, delay: 0.3, options: [.curveEaseInOut], animations: {
+                self.textView.alpha = 1
+            }) { (finished) in
+                UIView.animate(withDuration: 0.3, delay: 0, options: [], animations: {
+                    self.textView.alpha = 0.0
+                }, completion: { (_) in
+                    self.textView.font = UIFont.systemFont(ofSize: 16.0)
+                    self.textView.textAlignment = .natural
+                    self.textView.text = ""
+                    UIView.animate(withDuration: 0.0, animations: {
+                        self.textView.contentOffset = .zero
+                        self.stackView.isHidden = false
+                        self.textView.alpha = 1
+                    })
+                })
+            }
+        }
     }
     
     @objc func shareAction() {
@@ -122,17 +174,21 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
                 if success {
                     let text: String
                     do {
-                        text = try handler.extractDataToString()
+                        text = try handler.extractDataToString().prettyPrinted()
                     } catch {
                         text = error.localizedDescription
                     }
-                    self.dismiss(animated: true, completion: nil)
-                    self.textView.text = text.prettyPrinted()
+                    self.showText(text)
                 } else {
                     self.progressLabel.text = String.localizedStringWithFormat(Strings.ScannedQRCount, count, total)
                 }
             }
         }
+    }
+    
+    func showText(_ text: String) {
+        dismiss(animated: true, completion: nil)
+        textView.text = text
     }
     
     lazy var readerVC: QRCodeViewController = {
@@ -154,8 +210,7 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
                 }
                 try mqrHandler?.addCode(code: mqrDetectedTuple.1)
             } catch {
-                self.dismiss(animated: true, completion: nil)
-                self.textView.text = error.localizedDescription
+                showText(error.localizedDescription + "\n\n\n" + "Data found:\n\n\(text)")
             }
         }
     }
@@ -165,8 +220,7 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
     }
     
     func handleError(_ text: String) {
-        self.dismiss(animated: true, completion: nil)
-        self.textView.text = text
+        showText(text)
     }
     
     lazy var progressLabel: UILabel = {
@@ -178,4 +232,3 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
     }()
 
 }
-

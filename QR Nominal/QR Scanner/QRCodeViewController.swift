@@ -79,7 +79,13 @@ class QRCodeViewController: UIViewController {
         
         let getAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
         if getAuthorizationStatus != .denied {
-            setupCamera()
+            do {
+                try setupCamera()
+            } catch {
+                let alert = UIAlertController(title: "", message: Strings.ScanQRCodeCameraSetupFailureMessage, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: Strings.ScanQRCodeErrorOKButton, style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
         } else {
             let alert = UIAlertController(title: "", message: Strings.ScanQRCodePermissionErrorMessage, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: Strings.ScanQRCodeErrorOKButton, style: .default, handler: nil))
@@ -173,47 +179,35 @@ class QRCodeViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @objc func openLight() {
+    @objc func openLight() throws {
         guard let captureDevice = self.captureDevice else {
             return
         }
         
         if isLightOn {
-            do {
-                try captureDevice.lockForConfiguration()
-                captureDevice.torchMode = AVCaptureDevice.TorchMode.off
-                captureDevice.unlockForConfiguration()
-                navigationItem.rightBarButtonItem?.image = #imageLiteral(resourceName: "qrcode-light")
-                navigationItem.rightBarButtonItem?.tintColor = UIColor.Photon.White100
-            } catch {
-                print(error)
-            }
+            try captureDevice.lockForConfiguration()
+            captureDevice.torchMode = AVCaptureDevice.TorchMode.off
+            captureDevice.unlockForConfiguration()
+            navigationItem.rightBarButtonItem?.image = #imageLiteral(resourceName: "qrcode-light")
+            navigationItem.rightBarButtonItem?.tintColor = UIColor.Photon.White100
         } else {
-            do {
-                try captureDevice.lockForConfiguration()
-                captureDevice.torchMode = AVCaptureDevice.TorchMode.on
-                captureDevice.unlockForConfiguration()
-                navigationItem.rightBarButtonItem?.image = #imageLiteral(resourceName: "qrcode-isLighting")
-                navigationItem.rightBarButtonItem?.tintColor = QRCodeViewControllerUX.isLightingNavigationItemColor
-            } catch {
-                print(error)
-            }
+            try captureDevice.lockForConfiguration()
+            captureDevice.torchMode = AVCaptureDevice.TorchMode.on
+            captureDevice.unlockForConfiguration()
+            navigationItem.rightBarButtonItem?.image = #imageLiteral(resourceName: "qrcode-isLighting")
+            navigationItem.rightBarButtonItem?.tintColor = QRCodeViewControllerUX.isLightingNavigationItemColor
         }
         isLightOn = !isLightOn
     }
     
-    func setupCamera() {
+    func setupCamera() throws {
         guard let captureDevice = self.captureDevice else {
             dismiss(animated: false)
             return
         }
         
-        do {
-            let input = try AVCaptureDeviceInput(device: captureDevice)
-            captureSession.addInput(input)
-        } catch {
-            print(error)
-        }
+        let input = try AVCaptureDeviceInput(device: captureDevice)
+        captureSession.addInput(input)
         let output = AVCaptureMetadataOutput()
         if captureSession.canAddOutput(output) {
             captureSession.addOutput(output)
