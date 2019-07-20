@@ -15,7 +15,6 @@ struct EllipalDataExtractor {
 
             return string!
         } catch {
-
             throw "Unable to encode data for display" + error.localizedDescription
         }
     }
