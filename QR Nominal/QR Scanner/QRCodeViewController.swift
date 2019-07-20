@@ -175,6 +175,7 @@ class QRCodeViewController: UIViewController {
     }
     
     @objc func goBack() {
+        qrCodeDelegate?.didCancelScanning()
         self.dismiss(animated: true, completion: nil)
     }
     

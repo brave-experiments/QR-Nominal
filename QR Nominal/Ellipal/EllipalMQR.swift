@@ -84,9 +84,10 @@ class EllipalMQR: MQRCodeProtocol {
         if (url.host == nil) {
             throw "Missing ACTION in elp:// URL"
         }
-
-        return EllipalMQRCode(version: "V2", index: Int(url.user ?? "1") ?? 1, total: Int(url.password ?? "1") ?? 1,
-                              action: url.host!, components: url.pathComponents)
+        // Performing the logic to remove the url path suffic '/' from the path components list.
+        let components = url.path.trimmingCharacters(in: .init(charactersIn: "/")).components(separatedBy: "/")
+        return try EllipalMQRCode(version: "V2", index: Int(url.user ?? "1") ?? 1, total: Int(url.password ?? "1") ?? 1,
+                              action: url.host!, components: components)
 
     }
 }

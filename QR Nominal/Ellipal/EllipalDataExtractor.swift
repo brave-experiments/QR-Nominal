@@ -3,20 +3,15 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import Foundation
-import AnyCodable
 
 struct EllipalDataExtractor {
     static func extract(from parts: EllipalMQRCodeCollection) throws -> String {
-        var value = [AnyCodable]()
-
-        for code in parts {
-            value.append(AnyCodable(code.dictionary))
-        }
+        let value = parts.map({$0.dictionary})
         print("value")
         print(value)
 
         do {
-            let data = try JSONEncoder().encode(value)
+            let data = try JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
             print("data")
             print(data)
 

@@ -3,21 +3,81 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import Foundation
-import AnyCodable
 
-class EllipalMQRCode: Codable, Hashable {
+class EllipalMQRCode: Hashable {
     static func == (lhs: EllipalMQRCode, rhs: EllipalMQRCode) -> Bool {
         return lhs.action == rhs.action && lhs.index == rhs.index && lhs.total == rhs.total
     }
 
-    init(version: String, index: Int, total: Int, action: String, components: [String]) {
+    init(version: String, index: Int, total: Int, action: String, components: [String]) throws {
         self.version = version
         self.index = index
         self.total = total
         self.action = action
         self.components = components
 
-        self.dictionary = [String: AnyCodable]()
+        let thisAction = ActionType(rawValue: action) ?? ActionType.unknown
+        var entries: [String]
+        var dictionary: [String: Any] = ["version": version, "action": action]
+        switch thisAction {
+        case .sync:
+            if (components.count < 4 || components.count > 5) {
+                throw EllipalMQRCodeInsertionError.paramLength(actual: components.count, expected: 4)
+            }
+            entries = ["accountName", "cryptoType", "address", "pubKey", "legacyAddress"]
+            break
+            
+        case .sync2:
+            if (components.count != 5) {
+                throw EllipalMQRCodeInsertionError.paramLength(actual: components.count, expected: 5)
+            }
+            entries = ["walletRelease", "deviceId", "accountName",  "accountData", "indexBTCAddress"]
+            break
+            
+        case .tosign:
+            if (components.count != 5) {
+                throw EllipalMQRCodeInsertionError.paramLength(actual: components.count, expected: 5)
+            }
+            entries = ["chainType", "address", "tx", "tokenSymbol", "decimal"]
+            break
+            
+        case .signed:
+            if (components.count != 3) {
+                throw EllipalMQRCodeInsertionError.paramLength(actual: components.count, expected: 3)
+            }
+            entries = ["chainType", "address", "hexDataSigned"]
+            break
+            
+        case .eosnamesync:
+            if (components.count != 3) {
+                throw EllipalMQRCodeInsertionError.paramLength(actual: components.count, expected: 3)
+            }
+            entries = ["accountOwner", "ownerKey", "activeKey"]
+            break
+            
+        default:
+            throw EllipalMQRCodeInsertionError.actionType(actionType: action)
+        }
+        
+        for (index, entry) in entries.enumerated() {
+            dictionary[entry] = components[index]
+        }
+        
+        switch thisAction {
+        case .sync2:
+            let cryptoDataList = components[3].components(separatedBy: "]")
+                .map({$0.components(separatedBy: "[")})
+            dictionary["accountData"] = cryptoDataList
+            break
+            
+        case .signed:
+            dictionary["tx"] = components[2].replacingOccurrences(of: "_", with: "/")
+            break
+            
+        default:
+            break
+        }
+        self.dictionary = dictionary
     }
     
     func hash(into hasher: inout Hasher) {
@@ -32,7 +92,7 @@ class EllipalMQRCode: Codable, Hashable {
     let action: String
     let components: [String]
 
-    var dictionary: [String: AnyCodable]
+    var dictionary: [String: Any]
 }
 
 enum ActionType: String {
@@ -66,72 +126,6 @@ struct EllipalMQRCodeCollection: Sequence, IteratorProtocol {
     }
     
     private mutating func validateInsertion(qr: EllipalMQRCode) -> EllipalMQRCodeInsertionError? {
-        let thisAction = ActionType(rawValue: qr.action) ?? ActionType.unknown
-        var entries: [Int: String]
-        var dictionary: [String: AnyCodable] = ["version": AnyCodable(qr.version), "action": AnyCodable(qr.action)]
-        switch thisAction {
-        case .sync:
-            if (qr.components.count < 5 || qr.components.count > 6) {
-                return EllipalMQRCodeInsertionError.paramLength(actual:qr.components.count, expected: 5)
-            }
-            entries = [1: "accountName", 2: "cryptoType", 3: "address", 4: "pubKey", 5: "legacyAddress"]
-            break
-
-        case .sync2:
-            if (qr.components.count != 6) {
-                return EllipalMQRCodeInsertionError.paramLength(actual:qr.components.count, expected: 6)
-            }
-            entries = [1: "walletRelease", 2: "deviceId", 3: "accountName",  4: "accountData", 5: "indexBTCAddress"]
-            break
-
-        case .tosign:
-            if (qr.components.count != 6) {
-                return EllipalMQRCodeInsertionError.paramLength(actual:qr.components.count, expected: 6)
-            }
-            entries = [1: "chainType", 2: "address", 3: "tx", 4: "tokenSymbol", 5: "decimal"]
-            break
-
-        case .signed:
-            if (qr.components.count != 4) {
-                return EllipalMQRCodeInsertionError.paramLength(actual:qr.components.count, expected: 4)
-            }
-            entries = [1: "chainType", 2: "address", 3: "hexDataSigned"]
-            break
-
-        case .eosnamesync:
-            if (qr.components.count != 4) {
-                return EllipalMQRCodeInsertionError.paramLength(actual:qr.components.count, expected: 4)
-            }
-            entries = [1: "accountOwner", 2: "ownerKey", 3: "activeKey"]
-            break
-
-        default:
-            return EllipalMQRCodeInsertionError.actionType(actionType: qr.action)
-        }
-
-        for (_, entry) in entries.enumerated() {
-            dictionary[entry.value] = AnyCodable(qr.components[entry.key])
-        }
-
-        switch thisAction {
-        case .sync2:
-            let data = qr.components[4].components(separatedBy: "]")
-            var params = [AnyCodable]()
-            for (_, entry) in data.enumerated() {
-                params.append(AnyCodable(entry.components(separatedBy: "[")))
-            }
-            dictionary["accountData"] = AnyCodable(params)
-            break
-
-        case .signed:
-            dictionary["tx"] = AnyCodable(qr.components[3].replacingOccurrences(of: "_", with: "/"))
-            break
-
-        default:
-            break
-        }
-        qr.dictionary = dictionary
-
         guard let initialQR = initialQR else {
             self.initialQR = qr
             return nil
