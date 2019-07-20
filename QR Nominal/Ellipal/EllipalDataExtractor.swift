@@ -7,26 +7,28 @@ import AnyCodable
 
 struct EllipalDataExtractor {
     static func extract(from parts: EllipalMQRCodeCollection) throws -> String {
-        var data = [AnyCodable]()
+        var value = [AnyCodable]()
 
         for code in parts {
-            data.append(AnyCodable(code.dictionary))
+            value.append(AnyCodable(code.dictionary))
         }
-        print("parts")
-        print(data)
-        
-        if let json = try? JSONEncoder().encode(data) {
-            print("json")
-            if let text = String(data: json, encoding: .utf8) {
-                print("text")
-                return text
-            }
+        print("value")
+        print(value)
 
-            print("Unable to encode data for JSON display")
-            throw "Unable to encode data for JSON display"
+        do {
+            let data = try JSONEncoder().encode(value)
+            print("data")
+            print(data)
+
+            let string = String(data: data, encoding: .utf8)
+            print("string")
+
+            return string!
+        } catch {
+            print("Unable to encode data for display")
+            print(error.localizedDescription)
+
+            throw "Unable to encode data for display" + error.localizedDescription
         }
-
-        print("Unable to encode data for display")
-        throw "Unable to encode data for display"
     }
 }
