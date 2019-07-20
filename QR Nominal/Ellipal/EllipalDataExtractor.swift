@@ -7,21 +7,14 @@ import Foundation
 struct EllipalDataExtractor {
     static func extract(from parts: EllipalMQRCodeCollection) throws -> String {
         let value = parts.map({$0.dictionary})
-        print("value")
-        print(value)
 
         do {
             let data = try JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
-            print("data")
-            print(data)
 
             let string = String(data: data, encoding: .utf8)
-            print("string")
 
             return string!
         } catch {
-            print("Unable to encode data for display")
-            print(error.localizedDescription)
 
             throw "Unable to encode data for display" + error.localizedDescription
         }
