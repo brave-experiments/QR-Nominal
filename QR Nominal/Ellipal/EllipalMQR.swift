@@ -85,21 +85,8 @@ class EllipalMQR: MQRCodeProtocol {
             throw "Missing ACTION in elp:// URL"
         }
 
-/*
-        var index = 1
-        if let user = url.user {
-            index = Int(user) ?? 1
-        }
-
-        var total = 1
-        if let password = url.password {
-            total = Int(password) ?? 1
-        }
- */
-        let index = Int(url.user ?? "1") ?? 1
-        let total = Int(url.password ?? "1") ?? 1
-
-        return EllipalMQRCode(version: "V2", index: index, total: total, action: url.host!, components: url.pathComponents)
+        return EllipalMQRCode(version: "V2", index: Int(url.user ?? "1") ?? 1, total: Int(url.password ?? "1") ?? 1,
+                              action: url.host!, components: url.pathComponents)
 
     }
 }

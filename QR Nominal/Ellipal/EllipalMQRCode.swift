@@ -45,7 +45,6 @@ enum ActionType: String {
 }
 
 struct EllipalMQRCodeCollection: Sequence, IteratorProtocol {
-    
     var initialQR: EllipalMQRCode?
     private var internalArray: [EllipalMQRCode] = []
     private var currentIteration: Int = 0
@@ -109,9 +108,11 @@ struct EllipalMQRCodeCollection: Sequence, IteratorProtocol {
         default:
             return EllipalMQRCodeInsertionError.actionType(actionType: qr.action)
         }
+
         for (_, entry) in entries.enumerated() {
             dictionary[entry.value] = AnyCodable(qr.components[entry.key])
         }
+
         switch thisAction {
         case .sync2:
             let data = qr.components[4].components(separatedBy: "]")
@@ -130,7 +131,6 @@ struct EllipalMQRCodeCollection: Sequence, IteratorProtocol {
             break
         }
         qr.dictionary = dictionary
-        print(dictionary)
 
         guard let initialQR = initialQR else {
             self.initialQR = qr
@@ -161,10 +161,17 @@ enum EllipalMQRCodeInsertionError: LocalizedError {
     
     var localizedDescription: String {
         switch self {
-        case .total(let lhs, let rhs): return "Two Codes with different Total: \(lhs) vs \(rhs)"
-        case .action(let lhs, let rhs): return "Two Codes with different Action: \(lhs) vs \(rhs)"
-        case .actionType(let actionType): return "Invalid Action: \(actionType)"
-        case .paramLength(let actual, let expected): return "Invalid parameter count: \(actual) vs \(expected)"
+        case .total(let lhs, let rhs):
+            return "Two Codes with different Total: \(lhs) vs \(rhs)"
+
+        case .action(let lhs, let rhs):
+            return "Two Codes with different Action: \(lhs) vs \(rhs)"
+
+        case .actionType(let actionType):
+            return "Invalid Action: \(actionType)"
+
+        case .paramLength(let actual, let expected):
+            return "Invalid parameter count: \(actual) vs \(expected)"
         }
     }
 }
