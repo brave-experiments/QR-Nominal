@@ -6,7 +6,7 @@ import UIKit
 import AVFoundation
 
 class ViewController: UIViewController, QRCodeViewControllerDelegate {
-
+    
     var darkMode = true
     var animateLaunch = true
     var launchAnimationShown = false
@@ -178,6 +178,7 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
                     } catch {
                         text = error.localizedDescription
                     }
+                    self.mqrType = nil
                     self.showText(text)
                 } else {
                     self.progressLabel.text = String.localizedStringWithFormat(Strings.ScannedQRCount, count, total)
@@ -199,19 +200,15 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
         return controller
     }()
     
-    func didScanQRCodeWithURL(_ url: URL) {}
-    
     func didScanQRCodeWithText(_ text: String) {
-        if let data = text.data(using: .utf8) {
-            do {
-                let mqrDetectedTuple = try MQRType.detectType(from: data)
-                if mqrType == nil || mqrType! != mqrDetectedTuple.0 {
-                    mqrType = mqrDetectedTuple.0
-                }
-                try mqrHandler?.addCode(code: mqrDetectedTuple.1)
-            } catch {
-                showText(error.localizedDescription + "\n\n\n" + "Data found:\n\n\(text)")
+        do {
+            let mqrDetectedTuple = try MQRType.detectType(from: text)
+            if  mqrType != mqrDetectedTuple.0 {
+                mqrType = mqrDetectedTuple.0
             }
+            try mqrHandler?.addCode(code: mqrDetectedTuple.1)
+        } catch {
+            showText(error.localizedDescription + "\n" + "Data found:\n\(text)")
         }
     }
     
@@ -220,6 +217,7 @@ class ViewController: UIViewController, QRCodeViewControllerDelegate {
     }
     
     func handleError(_ text: String) {
+        mqrType = nil
         showText(text)
     }
     
