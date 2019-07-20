@@ -3,18 +3,30 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import Foundation
-
+import AnyCodable
 
 struct EllipalDataExtractor {
     static func extract(from parts: EllipalMQRCodeCollection) throws -> String {
-        //building the encoded data from parts.
-        let data = ""
+        var data = [AnyCodable]()
+
         for code in parts {
-/* TBD
-            data += code.value
- */
+            data.append(AnyCodable(code.dictionary))
         }
+        print("parts")
+        print(data)
         
-        return data
+        if let json = try? JSONEncoder().encode(data) {
+            print("json")
+            if let text = String(data: json, encoding: .utf8) {
+                print("text")
+                return text
+            }
+
+            print("Unable to encode data for JSON display")
+            throw "Unable to encode data for JSON display"
+        }
+
+        print("Unable to encode data for display")
+        throw "Unable to encode data for display"
     }
 }
